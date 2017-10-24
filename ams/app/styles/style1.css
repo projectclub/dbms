@@ -1,0 +1,26 @@
+
+html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
+input:hover{
+   outline: none;
+   border-color: green;
+}
+          
+/*
+box-shadow:0 8px 16px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);}
+input:focus{  
+outline: none;
+border-color: green;
+}
+*/
+
+.center {
+  margin: auto;
+  width: 40%;
+  padding: 10px;
+  align-items: center;
+}
+.btn{
+  color: green;
+  height:40px;
+
+}

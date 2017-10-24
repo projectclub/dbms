@@ -1,0 +1,20 @@
+[
+  	{
+	  	"id" :"strawberry-pudding",
+	  	"name": "strawberry- Pudding",
+	  	"img": "strawberry-pudding.jpg",
+	  	"rating": 4.6
+  	},
+  	{
+	  	"id":"orange-pudding",
+	  	"name": "orange Pudding",
+	  	"img": "orange-pudding.jpg",
+	  	"rating": 2.6
+  	},
+  	{
+	  	"id":"apple-pudding",
+	  	"name": "apple Pudding",
+	  	"img": "apple-pudding.jpg",
+	  	"rating": 3.6
+  	}
+]

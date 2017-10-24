@@ -1,0 +1,8 @@
+SET @x = (
+  SELECT IF( MIN(t1.id-1) = 0, NULL, MIN(t1.id-1) )
+  FROM      t t1
+  LEFT JOIN t t2 ON t2.id = t1.id - 1
+  WHERE t2.id IS NULL
+);
+
+INSERT INTO t(id) VALUES (@x);
