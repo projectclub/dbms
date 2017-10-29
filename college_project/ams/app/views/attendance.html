@@ -1,0 +1,47 @@
+	    <!--main page container-->
+	    <div ui-view id="main-content" class="w3-container  " style="max-width:900px; top:-20px ;position:relative;">    
+			<div id="class_details" class="w3-panel  w3-theme-d2 w3-card-4" style="z-index: +1; position:relative;background-color: white;">
+				<div ng-click="attendance.loadAttendenceTable()" id="Attendance Table" class="w3-right w3-button w3-hover-black" ><br/>Attendance Table</div>
+				<div ng-click="null" class="w3-right w3-button w3-hover-black" ><br/>Create PDF</div>
+				
+				<h3>Class :{{attendance.course_id}} 
+					{{attendance.courses[attendance.course_id].title}} 
+					{{attendance.courses[attendance.course_id].year}} 
+					sem: {{attendance.courses[attendance.course_id].semester}}
+				</h3>
+				<br/>
+				<div layout-gt-xs="row">
+				    <div flex-gt-xs="" >
+				      <h4>Date</h4>
+				      <!-- <md-datepicker ng-model="attendance.classDate" md-placeholder="Enter date" md-open-on-focus="" ></md-datepicker> -->
+
+				      <mdp-date-picker ng-model="attendance.classDate" ng-change="attendance.loadAttendence()" name="classdate" mdp-format="DD/MM/YYYY" mdp-date-filter="attendance.filterDate">
+				      	<!-- <div ng-messages="demoForm.classdate.$error">
+		                  <div ng-message="required">This is required</div>
+		                  <div ng-message="format">Invalid format</div>
+		                </div> -->
+				      </mdp-date-picker>
+					</div>
+					<div flex-gt-xs="column" >
+				      <h4>From:</h4>
+				      <mdp-time-picker mdp-auto-switch="true" ng-model="attendance.fromTime"  ng-change="attendance.loadAttendence()"></mdp-time-picker>
+
+				      <h4>To:</h4>
+				      <mdp-time-picker mdp-auto-switch="true" ng-model="attendance.toTime"  ng-change="attendance.loadAttendence()"></mdp-time-picker>
+				    </div>
+				    <div flex-gt-xs="column" >
+				    	<h4>class type</h4>
+						<md-input-container flex="50">
+				          <md-select name="class_type" ng-model="attendance.component_val" required>
+				            <md-option ng-repeat=" (component_val, class_type) in attendance.courses[attendance.course_id].components" value="{{component_val}}" ng-click="attendance.classTypeChange(component_val)">{{class_type}}</md-option>
+				        </md-input-container>
+					</div>
+			    </div>	
+			</div>	
+          	<div ng-include="'views/timetable.html'" ng-controller="TimetableCtrl as timetable"></div>
+
+
+			<div id="studentlistview" ng-include="'views/studentlist.html'" >
+			</div>
+
+		</div>

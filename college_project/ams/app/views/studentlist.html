@@ -1,0 +1,40 @@
+<div class="w3-card-4 " style="z-index: +1; position:relative;background-color: white;">
+	<md-toolbar layout="row" class="md-hue-2">
+      <div class="md-toolbar-tools">
+        <span>Students</span>
+      </div>
+    </md-toolbar>
+
+    <md-subheader class="md-no-sticky">
+    	Sort By
+    	<md-button  class="md-primary" ng-class="(attendance.orderBy=='rollno'?'md-accent': 'md-hue-1')" id="byid" ng-click="attendance.setOrderBY('rollno')" > Id</md-button>
+		<md-button class="md-primary " ng-class="(attendance.orderBy=='name'?'md-accent': 'md-hue-1')" id="byalph" ng-click="attendance.setOrderBY('name')" >Name</md-button>
+		<md-button class="md-primary" ng-class="(attendance.orderBy=='proxy'?'md-accent': 'md-hue-1')" id="bycheck"  ng-click="attendance.setOrderBY('proxy')" >Presenty</md-button>
+		<md-button class="md-primary md-hue-1"  id="byper"  >Percent</md-button>
+    </md-subheader>
+	<div style="padding: 20px">
+		<md-divider ></md-divider>
+	</div>
+	  <md-content >
+	    <md-list flex>
+	      <md-list-item class="md-2-line" ng-repeat="student in attendance.students  | orderBy :attendance.orderBy " ng-click="attendance.markProxy(student.rollno)" ng-class="{present: student.proxy=='P', absent: student.proxy=='A', highlight: attendance.proxy_marking}" >
+	        <img ng-if="student.gender=='m'" ng-src="images/{{attendance.m_avtar}}" class="md-avatar" alt="{{student.who}}" style=" margin-left: 20px; margin-right: 20px;">
+	        <img ng-if="student.gender=='f'" ng-src="images/{{attendance.f_avtar}}" class="md-avatar" alt="{{student.who}}" style=" margin-left: 20px; margin-right: 20px;">
+
+	        <div class="md-list-item-text">
+	          <h3>{{student.rollno}}</h3>
+	          <h4>{{student.name}}</h4>
+	          <!-- <p>{{student.gender}}</p> -->
+	        </div>
+	        <md-button class="md-secondary md-icon-button" aria-label="call">
+	            <a>{{(attendance.students_proxy | filter: {'rollno': student.rollno}:true)[0].proxy}}</a>
+	        </md-button>
+	        <md-divider md-inset ng-if="!$last"></md-divider>
+	      </md-list-item>
+	    </md-list>
+	  </md-content>
+	  <md-content layout="row" layout-align="end center"
+	  style="padding:0 30px 30px 0 ">
+	  	<md-button class="md-accent md-primary" ng-click="attendance.saveAttendance()" >{{ attendance.attendanceButtonState["state_text"][attendance.attendanceButtonState["state"]] }}</md-button>
+	  </md-content >
+</div>

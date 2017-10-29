@@ -1,0 +1,21 @@
+<div id="courselist" class="w3-container " style="padding-left: 0;padding-right: 0; z-index: +1; position:relative;">    
+<!-- The Grid -->
+		 <div id="title" class="w3-card-4 w3-padding-64 w3-border " style="padding-left: 30px;background-color: white;">
+		<h2 class="w3-jumbo">Courses</h2>
+		<p>&nbsp choose a course</p>
+
+	</div>
+	<br/>
+	<div class ="w3-card" style="background-color: white;">
+	
+		<ul class=" w3-ul " >
+	    	<li id="facultyCourse-{{course_id}}" ng-click="facultyCourses.loadAttendence(course_id, course_details)" ng-repeat="(course_id, course_details) in facultyCourses.courses" class='student w3-padding-16 w3-btn' style="width:100%; text-align: left;"  > 
+	    		&nbsp &nbsp <span id='course_id'>{{course_details.course_id}} </span>
+	    		&nbsp <span id='course_name'>{{course_details.title}}</span> 
+	    		&nbsp <span id='course_year'>{{course_details.year}}</span>
+	    		&nbsp sem:&nbsp<span id='sem'>{{course_details.semester}}</span>
+	    		<br/>
+	    	</li>
+		</ul>
+	</div>
+</div>

@@ -1,0 +1,40 @@
+
+<!-- 	<div ng-click="timetable.timetableToggle()" style="margin: 30px 30px 30px 5px; position:relative; cursor: pointer;">
+		<a >Timetable</a> <a style="position:absolute; right:10px; top:-20px; font-size: 40px; text-decoration: none;" >{{timetable.timetableToggle_val}}</a>
+	</div> -->
+	<!-- <style type="text/css">
+		.google-visualization-tooltip{
+			display: none;
+		}
+	</style> -->
+	
+			<div ui-view class="w3-card-4 w3-padding w3-border" style="z-index: +1; position:relative;background-color: white; margin-bottom: 20px;">
+				  <md-content>
+<!-- 				    <div  style="margin: 30px 30px 30px 5px; position:relative; cursor: pointer;">	 -->
+					    <md-tabs md-dynamic-height md-border-bottom>
+					      <md-tab label="Timetable">
+					        <md-content class="md-padding">
+					          	<div id="class_timtable" ng-class="{hidden: timetable.timetableToggle_val!=='-'}" style="height: 300px; max-width: 800px;"></div>
+					        </md-content>
+					      </md-tab>
+<!-- 					      <md-tab label="two">
+					        <md-content class="md-padding">
+					          <h1 class="md-display-2">classes</h1>
+					          <p>Lorem ipsum dolor sit amet, consectetur adipiscing </p>
+					        </md-content>
+					      </md-tab>
+					      <md-tab label="three">
+					        <md-content class="md-padding">
+					          <h1 class="md-display-2">Tab Three</h1>
+					          <p>Integer turpis erat, porttitor vitae mi faucibus, laoreet interdum tellus. Curabitur posuere molestie dictum. Morbi eget congue risus, quis rhoncus quam. Suspendisse vitae hendrerit erat, at posuere mi. Cras eu fermentum nunc. Sed id ante eu orci commodo volutpat non ac est. Praesent ligula diam, congue eu enim scelerisque, finibus commodo lectus.</p>
+					        </md-content>
+					      </md-tab> -->
+					      <md-tab label="-">
+					        <md-content class="md-padding">
+					        </md-content>
+					      </md-tab>
+					     <!--  <a ng-click="timetable.timetableToggle()" style="position:absolute; right:10px; top:-20px; font-size: 40px; text-decoration: none;" >{{timetable.timetableToggle_val}}</a> -->
+					    </md-tabs>
+				    
+				  </md-content>
+			</div>

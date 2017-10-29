@@ -1,0 +1,66 @@
+<html>
+	<head>
+		<script type="text/javascript" src="../old/js/loader.js"></script>
+		<script type="text/javascript">
+			google.charts.load('current', {'packages':['timeline']});
+			google.charts.setOnLoadCallback(drawChart);
+
+			function drawChart() {
+				var container = document.getElementById('timeline-tooltip');
+				var chart = new google.visualization.Timeline(container);
+				var dataTable = new google.visualization.DataTable();
+
+				dataTable.addColumn({ type: 'string', id: 'President' });
+				dataTable.addColumn({ type: 'string', id: 'dummy bar label' });
+				/*dataTable.addColumn({ type: 'string', role: 'tooltip' });*/
+				dataTable.addColumn({ type: 'date', id: 'Start' });
+				dataTable.addColumn({ type: 'date', id: 'End' });
+/*				dataTable.addRows([
+					[ 'mon', 'oopd', 'null', new Date(0, 0, 0, 9, 0, 0),  new Date(0, 0, 0, 10, 0, 0) ],
+					[ 'tue', 'oopd', 'null', new Date(0, 0, 0, 10, 0, 0),  new Date(0, 0, 0, 11, 0, 0) ],
+					[ 'wed', 'em', 'null',   new Date(0, 0, 0, 9, 0, 0),  new Date(0, 0, 0, 10, 0, 0) ],
+					[ 'thu', 'em', 'null',   new Date(0, 0, 0, 10, 0, 0),  new Date(0, 0, 0, 12, 0, 0) ],
+					[ 'fri', 'oopd', 'null', new Date(0, 0, 0, 9, 0, 0),  new Date(0, 0, 0, 11, 0, 0) ],
+					[ 'sat', 'em', 'null',   new Date(0, 0, 0, 16, 0, 0),  new Date(0, 0, 0, 17, 0, 0) ]
+					]);*/
+				dataTable.addRows([
+					[ 'mon', 'oopd', new Date(0, 0, 0, 9, 0, 0),  new Date(0, 0, 0, 10, 0, 0) ],
+					[ 'tue', 'oopd',  new Date(0, 0, 0, 10, 0, 0),  new Date(0, 0, 0, 11, 0, 0) ],
+					[ 'wed', 'em',    new Date(0, 0, 0, 9, 0, 0),  new Date(0, 0, 0, 10, 0, 0) ],
+					[ 'thu', 'em',   new Date(0, 0, 0, 10, 0, 0),  new Date(0, 0, 0, 12, 0, 0) ],
+					[ 'fri', 'oopd', new Date(0, 0, 0, 9, 0, 0),  new Date(0, 0, 0, 11, 0, 0) ],
+					[ 'sat', 'em',    new Date(0, 0, 0, 16, 0, 0),  new Date(0, 0, 0, 17, 0, 0) ]
+					]);
+				// Set chart option
+				var option = {'title': 'TimeTable',
+						'width':400,
+						'height':200,
+						'enableInteractivity' : false,
+						'tooltip': { 'trigger': 'none' }
+					};
+
+				// The select handler 
+				function selectHandler() {
+				    var selectedItem = chart.getSelection()[0];
+				    if (selectedItem) {
+				      var value1 = dataTable.getValue(selectedItem.row, 1);
+				      var value2 = dataTable.getValue(selectedItem.row, 2);
+				      alert('The user selected ' + value1 +value2);
+				  }
+			    }
+				//Listener 
+				google.visualization.events.addListener(chart, 'select', selectHandler);
+
+				chart.draw(dataTable);
+			}
+		</script>
+	</head>
+	<body>
+		<style type="text/css">
+			.google-visualization-tooltip{
+				display: none;
+			}
+		</style>
+		<div id="timeline-tooltip" style="height: 300px; max-width: 800px;"></div>
+	</body>
+</html>
