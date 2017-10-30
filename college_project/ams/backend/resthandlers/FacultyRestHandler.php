@@ -25,23 +25,42 @@ class FacultyRestHandler extends SimpleRest{
 
 		return $this->restHandling($rawData);
 	}
-	function getFaculty($faculty_id){
+	function add(){
 		$object = new Faculty($this->conn);
-		$rawData = $object->getFaculty($faculty_id);
-
-		return $this->restHandling($rawData);
+		$rawData = $object->addFaculty();
+		return $this->restHandlingNSQ($rawData);
 	}
-	function getTeachingCourse($faculty_id, $year){
+	function edit(){
 		$object = new Faculty($this->conn);
-		$rawData = $object->getTeachingCourse($faculty_id, $year);
+		$rawData = $object->updateFaculty();
+		return $this->restHandlingNSQ($rawData);
+	}
+	function delete(){
+		$object = new Faculty($this->conn);
+		$rawData = $object->deleteFaculty();
+		return $this->restHandlingNSQ($rawData);
+	}
+
+	function getTeachingCourse(){
+		$object = new Faculty($this->conn);
+		$rawData = $object->getTeachingCourse();
 		
 		return $this->restHandling($rawData);
 	}
-	function getCourseEnrollment($course_faculty_year_id){
+	function addTeachingCourse(){
 		$object = new Faculty($this->conn);
-		$rawData = $object->getCourseEnrollment($course_faculty_year_id);
-
-		return $this->restHandling($rawData);
+		$rawData = $object->addTeachingCourse();
+		return $this->restHandlingNSQ($rawData);
+	}
+	function editTeachingCourse(){
+		$object = new Faculty($this->conn);
+		$rawData = $object->updateTeachingCourse();
+		return $this->restHandlingNSQ($rawData);
+	}
+	function deleteTeachingCourse(){
+		$object = new Faculty($this->conn);
+		$rawData = $object->deleteTeachingCourse();
+		return $this->restHandlingNSQ($rawData);
 	}
 
 }

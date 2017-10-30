@@ -4,21 +4,43 @@ RewriteEngine on
 
 # map neat URL to internal URL
 #login
-RewriteRule ^ams/auth/([0-9]+)/([a-z]+)/?$   RestController.php?user=$1&pass=$2 [nc,L]
+RewriteRule ^ams/auth/([0-9]+)/([a-zA-Z]+)/?$   RestController.php?user=$1&pass=$2 [nc,L]
 
 #course
 RewriteRule ^ams/courses/$    RestController.php?view=CourseAll [nc,qsa]
-RewriteRule ^ams/course/([0-9]+)/$   RestController.php?view=CourseSingle&course_id=$1 [nc,qsa]
+RewriteRule ^ams/course/([0-9]+)/$   RestController.php?view=CourseAll&course_id=$1 [nc,qsa]
+RewriteRule ^ams/facultycourseenrollment/([0-9]+)/$   RestController.php?view=CourseEnrollment&course_faculty_year_id=$1 [nc,qsa]
+RewriteRule ^ams/facultycourseenrollment/([0-9]+)/([0-9]+)/$   RestController.php?view=CourseEnrollment&course_id=$1&year=$2 [nc,qsa]
+RewriteRule ^ams/studentcourseenrollment/([0-9]+)/$   RestController.php?view=StudentCourseEnrollment&rollno=$1 [nc,qsa]
+
+RewriteRule ^ams/create/Course/$ RestController.php?create=Course [L]
+RewriteRule ^ams/update/Course/$ RestController.php?update=Course [L]
+RewriteRule ^ams/delete/Course/$ RestController.php?delete=Course [L]
+RewriteRule ^ams/create/CourseCEnrollment/$ RestController.php?create=CourseCEnrollment [L]
+RewriteRule ^ams/delete/CourseCEnrollment/$ RestController.php?delete=CourseCEnrollment [L]
+
 
 #faculty
-RewriteRule ^ams/facultycourse/([0-9]+)/([0-9]+)/$   RestController.php?view=FacultyCourse&faculty_id=$1&year=$2 [nc,qsa]
-RewriteRule ^ams/facultycourseenrollment/([0-9]+)/$   RestController.php?view=FacultyCourseEnrollment&course_faculty_year_id=$1 [nc,qsa]
+RewriteRule ^ams/Faculties/$   RestController.php?view=Faculty [nc,qsa]
 RewriteRule ^ams/Faculty/([0-9]+)/$   RestController.php?view=Faculty&faculty_id=$1 [nc,qsa]
+RewriteRule ^ams/facultycourse/([0-9]+)/([0-9]+)/$   RestController.php?view=FacultyCourse&faculty_id=$1&year=$2 [nc,qsa]
+RewriteRule ^ams/facultycourses/$   RestController.php?view=FacultyCourse [nc,qsa]
+
+RewriteRule ^ams/create/Faculty/$ RestController.php?create=Faculty [L]
+RewriteRule ^ams/update/Faculty/$ RestController.php?update=Faculty [L]
+RewriteRule ^ams/delete/Faculty/$ RestController.php?delete=Faculty [L]
+RewriteRule ^ams/create/FacultyCourse/$ RestController.php?create=FacultyCourse [L]
+RewriteRule ^ams/update/FacultyCourse/$ RestController.php?update=FacultyCourse [L]
+RewriteRule ^ams/delete/FacultyCourse/$ RestController.php?delete=FacultyCourse [L]
+
 
 #timetable
-RewriteRule ^ams/FacultyTimetable/([0-9]+)/$   RestController.php?view=FacultyTimetable&faculty_id=$1 [nc,qsa]
+RewriteRule ^ams/FacultyTimetable/([0-9]+)/([0-9]+)/$   RestController.php?view=FacultyTimetable&faculty_id=$1&year=$2 [nc,qsa]
 RewriteRule ^ams/SemTimetable/([0-9]+)/([0-9]+)/$   RestController.php?view=SemTimetable&course_faculty_year_id=$1&year=$2 [nc,qsa]
 RewriteRule ^ams/StudentTimetable/([0-9]+)/([0-9]+)/$   RestController.php?view=StudentTimetable&course_faculty_year_id=$1&year=$2 [nc,qsa]
+
+RewriteRule ^ams/create/Timetable/$ RestController.php?create=Timetable [L]
+RewriteRule ^ams/delete/Timetable/$ RestController.php?delete=Timetable [L]
 
 #class
 RewriteRule ^ams/list/Classes/([0-9]+)/$    RestController.php?view=Classes&course_faculty_year_id=$1 [nc,qsa]
@@ -26,12 +48,23 @@ RewriteRule ^ams/list/Classes/$    RestController.php?view=Classes [nc,qsa]
 RewriteRule ^ams/list/Class/([0-9]+)/$   RestController.php?view=Classes&class_id=$1 [nc,qsa]
 
 RewriteRule ^ams/create/Class/$ RestController.php?create=Class [L]
+RewriteRule ^ams/update/Class/$ RestController.php?update=Class [L]
+RewriteRule ^ams/delete/Class/$ RestController.php?delete=Class [L]
 
 #attendance
-RewriteRule ^ams/list/component/attendance/([0-9]+)/$    RestController.php?view=Attendance&course_faculty_year_id=$1 [nc,qsa]
+RewriteRule ^ams/list/AllAttendance/$   RestController.php?view=Attendance [nc,qsa]
 RewriteRule ^ams/list/Attendance/([0-9]+)/$   RestController.php?view=Attendance&class_id=$1 [nc,qsa]
+RewriteRule ^ams/list/component/attendance/([0-9]+)/$    RestController.php?view=Attendance&course_faculty_year_id=$1 [nc,qsa]
 RewriteRule ^ams/list/Attendance/([0-9]+)/([0-9]+)/$   RestController.php?view=Attendance&course_id=$1&year=$2 [nc,qsa]
 
 RewriteRule ^ams/create/Attendance/$ RestController.php?create=Attendance [L]
 RewriteRule ^ams/update/Attendance/$ RestController.php?update=Attendance [L]
 RewriteRule ^ams/delete/Attendance/$ RestController.php?delete=Attendance [L]
+
+#student
+RewriteRule ^ams/list/Students/$   RestController.php?view=Student [nc,qsa]
+RewriteRule ^ams/list/Student/([0-9]+)/$   RestController.php?view=Student&rollno=$1 [nc,qsa]
+
+RewriteRule ^ams/create/Student/$ RestController.php?create=Student [L]
+RewriteRule ^ams/update/Student/$ RestController.php?update=Student [L]
+RewriteRule ^ams/delete/Student/$ RestController.php?delete=Student [L]

@@ -47,7 +47,7 @@
                       text-shadow: 3px 3px 2px grey;
                     }
                   </style>
-                  <div id="nav_dropdown" class="txtshw w3-dropdown-hover w3-bar-item w3-right" ng-class="{hidden: $state.is('home')} " style="position: absolute; top:120px; right:2%;" >
+                  <div id="nav_dropdown" class="txtshw w3-dropdown-hover w3-bar-item w3-right" ng-class="{hidden: $state.is('home')} " style="position: absolute; top:60px; right:2%;" >
                           <h4 class=" w3-btn w3-hide-small w3-padding-large w3-hover-white" title="My Account" >
                             {{$user.username}}&nbsp&nbsp
                             <img ng-src="images/{{$user.avatar}}" class="w3-circle" style="height:80px;width:80px" alt="Avatar">
@@ -118,6 +118,7 @@
         <script src="scripts/controllers/timetable.js"></script>
         <script src="scripts/services/timetable.js"></script>
         <script src="scripts/controllers/attendancetable.js"></script>
+        <script src="scripts/controllers/adminhome.js"></script>
         <!-- endbuild -->
 </body>
 </html>

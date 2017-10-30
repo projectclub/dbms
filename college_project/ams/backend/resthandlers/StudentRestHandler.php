@@ -1,9 +1,9 @@
 <?php
 	require_once("SimpleRest.php");
-	require_once('classes/Class.php');
+	require_once('classes/Student.php');
 
 
-class ClassRestHandler extends SimpleRest {
+class StudentRestHandler extends SimpleRest {
 
 	protected $conn=null;
 
@@ -16,31 +16,31 @@ class ClassRestHandler extends SimpleRest {
 
 	}	
 
-	public function __destruct() {
+	public function __destruct()
+	{
 		$this->conn->close();
 	}
 
-	function getClasses(){
-		$object = new TClass($this->conn);
-		$rawData = $object->getClasses();
+	function getStudents(){
+		$object = new Student($this->conn);
+		$rawData = $object->getStudents();
 		return $this->restHandling($rawData);
 	}
-
 	function add(){
-		$object = new TClass($this->conn);
-		$rawData = $object->addClass();
+		$object = new Student($this->conn);
+		$rawData = $object->addStudent();
 		return $this->restHandlingNSQ($rawData);
 	}
 	function edit(){
-		$object = new TClass($this->conn);
-		$rawData = $object->updateClass();
+		$object = new Student($this->conn);
+		$rawData = $object->updateStudent();
 		return $this->restHandlingNSQ($rawData);
 	}
 	function delete(){
-		$object = new TClass($this->conn);
-		$rawData = $object->deleteClass();
+		$object = new Student($this->conn);
+		$rawData = $object->deleteStudent();
 		return $this->restHandlingNSQ($rawData);
-	}
+	}	
 }
 
 ?>

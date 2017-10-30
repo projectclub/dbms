@@ -27,22 +27,43 @@ class CourseRestHandler extends SimpleRest {
 
 		return $this->restHandling($rawData);
 	}
-
-	function getFacultyCourses($faculty_id){
+	function add(){
 		$object = new Course($this->conn);
-		$rawData = $object->getCourses($faculty_id);
-		
+		$rawData = $object->addCourse();
+		return $this->restHandlingNSQ($rawData);
+	}
+	function edit(){
+		$object = new Course($this->conn);
+		$rawData = $object->updateCourse();
+		return $this->restHandlingNSQ($rawData);
+	}
+	function delete(){
+		$object = new Course($this->conn);
+		$rawData = $object->deleteCourse();
+		return $this->restHandlingNSQ($rawData);
+	}	
+
+	function getCourseEnrollment(){
+		$object = new Course($this->conn);
+		$rawData = $object->getCourseEnrollment();
 		return $this->restHandling($rawData);
 	}
-
-	function getCourse($course_id){
-/*		$this->conn = new mysqli($details['server_host'], $details['mysql_name'], $details['mysql_password'], $details['mysql_database']);	
-*/
+	function getStudentEnrollment(){
 		$object = new Course($this->conn);
-		$rawData = $object->getCourse($course_id);
-		
+		$rawData = $object->getStudentEnrollment();
 		return $this->restHandling($rawData);
 	}
+	function addCourseCEnrollment(){
+		$object = new Course($this->conn);
+		$rawData = $object->addCourseCEnrollment();
+		return $this->restHandlingNSQ($rawData);
+	}
+	function deleteCourseCEnrollment(){
+		$object = new Course($this->conn);
+		$rawData = $object->deleteCourseCEnrollment();
+		return $this->restHandlingNSQ($rawData);
+	}	
+	
 }
 
 ?>

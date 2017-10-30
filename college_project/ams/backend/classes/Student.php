@@ -19,130 +19,125 @@ Class Student{
 	}
 
 	public function getStudents() {
-		$result = $this->conn->query("SELECT `rollno`, `name`, `gender` FROM `student` ");
+		$query="SELECT `rollno`, `name`, `gender` FROM `student` ";
+
+		if(isset($_GET['rollno']))	{
+			$rollno=$_GET['rollno'];
+			$query.=" WHERE `rollno` = ". $rollno;
+		}	
+		$result = $this->conn->query($query);
 		$data=array();
 		while($rs = $result->fetch_array(MYSQLI_ASSOC)) {
 		  $data[$rs["rollno"]]["name"] = $rs["name"];
   		  $data[$rs["rollno"]]["gender"] = $rs["gender"];			  		
 		}
 		return $data;
-	}
-
-	public function getStudent($rollno) {
-		$result = $this->conn->query("SELECT `rollno`, `name`, `gender` FROM `student` WHERE `rollno`=". $rollno);
-		$data=array();
-		while($rs = $result->fetch_array(MYSQLI_ASSOC)) {
-		  $data[$rs["rollno"]]["name"] = $rs["name"];	
-  		  $data[$rs["rollno"]]["gender"] = $rs["gender"];	
 		}
-		return $data;
-	}
 
-	public function setStudent( $name , $gender , $department_id = 1,  $address = null, $date_of_birth = null, $phone_no = null, $email_id = null, $joining_year = null, $fathers_name = null, $mothers_name = null) {
-		
-		$q="INSERT INTO `student`(`name`, `department_id`, `address`, `gender`, `date_of_birth`, `phone_no`, `email_id`, `joining_year`, `fathers_name`, `mothers_name`) VALUES (
-		". nullHandler($name). ",
-		". nullHandler($department_id). ",
-		". nullHandler($address). ",
-		". nullHandler($gender). ",
-		". nullHandler($date_of_birth). ",
-		". nullHandler($phone_no). ",
-		". nullHandler($email_id). ",
-		". nullHandler($joining_year). ",
-		". nullHandler($fathers_name). ",
-		". nullHandler($mothers_name). "
+	public function addStudent() {
+		if(isset($_POST['name']) && isset($_POST['gender']) ) {
+			$name = $_POST['name'];
+			 $department_id = 1;
+			$address = '';
+			$gender =   $_POST['gender'];
+			$date_of_birth = '';
+			$phone_no = '';
+			$email_id = '';
+			$joining_year = '';
+			$fathers_name = '';
+			$mothers_name = '';
+
+			if(isset($_POST['department_id'])) { $department_id = $_POST['department_id']; }
+			if(isset($_POST['address'])) { $address = $_POST['address']; }
+			if(isset($_POST['date_of_birth'])) { $date_of_birth = $_POST['date_of_birth']; }
+			if(isset($_POST['phone_no'])) { $phone_no = $_POST['phone_no']; }
+			if(isset($_POST['email_id'])) { $email_id = $_POST['email_id']; }
+			if(isset($_POST['joining_year'])) { $joining_year = $_POST['joining_year']; }
+			if(isset($_POST['fathers_name'])) { $fathers_name = $_POST['fathers_name']; }
+			if(isset($_POST['mothers_name'])) { $mothers_name = $_POST['mothers_name']; }
+
+			$query = "INSERT INTO `student`(`name`, `department_id`, `address`, `gender`, `date_of_birth`, `phone_no`, `email_id`, `joining_year`, `fathers_name`, `mothers_name`) VALUES (
+			'". $name ."'
+			". $department_id ."
+			'". $address ."'
+			'". $gender ."'
+			'". $date_of_birth ."'
+			". $phone_no ."
+			'". $email_id ."'
+			". $joining_year ."
+			'". $fathers_name ."'
+			'". $mothers_name ."'
 		)";
 
-/*		echo "<br>". $q ."<br>"; #debug
-*/		
-		$result = $this->conn->query( $q);
-		$current_id = $this->conn->insert_id;
-		if( !empty($current_id) )
-			$message = "New Record Added Successfully";
-		else
-			$message = "Failed Adding New Record";
-		return $message;
-	}
-
-	public function updateStudent($rollno, $name=null ,$gender=null , $department_id=null, $address = null, $date_of_birth = null, $phone_no = null, $email_id = null, $joining_year = null, $fathers_name = null, $mothers_name = null ) {
-		
-		$q="UPDATE `student` SET 
-		". nullHandler($name, "name") ."
-		". nullHandler($department_id, "department_id", ",") ."
-		". nullHandler($address, "address", ",") ."
-		". nullHandler($gender, "gender", ",") ."
-		". nullHandler($date_of_birth, "date_of_birth", ",") ."
-		". nullHandler($phone_no, "phone_no", ",") ."
-		". nullHandler($email_id, "email_id", ",") ."
-		". nullHandler($joining_year, "joining_year", ",") ."
-		". nullHandler($fathers_name, "fathers_name", ",") ."
-		". nullHandler($mothers_name, "mothers_name", ",") ."
-		WHERE `rollno` =". $rollno;
-		
-/*		echo "<br>". $q ."<br>";	#debug
-*/
-		$result = $this->conn->query( $q);	
-		if( $this->conn->affected_rows > 0 )
-			$message = "Record Modified Successfully";
-		else
-			$message = "Failed Record Modification";
-		return $message;
-	}
-
-	public function deleteStudent($rollno ) {
-		$result = $this->conn->query("DELETE FROM `student` WHERE `rollno`= ". $rollno);
-		
-		if( $this->conn->affected_rows > 0 )
-			$message = "Record Deleted Successfully";
-		else
-			$message = "Failed Record Deletion";
-		return $message;			  		
-	}
-
-	public function getStudentEnrollment($rollno) {
-		$result = $this->conn->query("SELECT `rollno`, `enrollment`.`course_faculty_year_id`, `course`.`title`, `course`.`semester`, `faculty`.`faculty_id`, `faculty`.`faculty_name` FROM `enrollment` JOIN `teaches` ON  `enrollment`.`course_faculty_year_id`= `teaches`.`course_faculty_year_id` JOIN `course` ON `teaches`.`course_id`= `course`.`course_id` JOIN `faculty` ON `teaches`.`faculty_id`= `faculty`.`faculty_id` WHERE `rollno` = ". $rollno);
-		$data=array();
-		while($rs = $result->fetch_array(MYSQLI_ASSOC)) {
-		  $data[$rs["course_faculty_year_id"]]["title"] = $rs["title"];	
-  		  $data[$rs["course_faculty_year_id"]]["semester"] = $rs["semester"];	
-  		  $data[$rs["course_faculty_year_id"]]["faculty_id"] = $rs["faculty_id"];	
-  		  $data[$rs["course_faculty_year_id"]]["faculty_name"] = $rs["faculty_name"];	
+		// echo "<br>". $q ."<br>"; #debug	
+			$result = $this->executeQuery($this->conn, $query);	
+			if($result != 0){
+				$result = array('success'=>1);
+				return $result;
+			}
 		}
-		return $data;
 	}
 
-	public function setStudentEnrollment( $rollno, $course_faculty_year_id) {
+	protected function andAddIfIsset(&$query, $varString, &$count, $q=False){
+			if(isset($_POST[$varString]) ){ 
+			$val=$_POST[$varString]; 
+			if($count > 0)
+				$query .=" AND ";
+			if($q)
+				$query .= " ". $varString. " = '". $val. "' ";
+			else
+				$query .= " ". $varString. " = ". $val. " ";
+		}
+	}
+	public function updateStudent() {
 		
-		$q="INSERT INTO `enrollment`(`rollno`, `course_faculty_year_id`) VALUES  (
-		". nullHandler($rollno). ",
-		". nullHandler($course_faculty_year_id). ",
-		)";
+		$query="UPDATE `student` SET "
 
-/*		echo "<br>". $q ."<br>"; #debug
-*/		
-		$result = $this->conn->query( $q);
-		$current_id = $this->conn->insert_id;
-		if( !empty($current_id) )
-			$message = "New Record Added Successfully";
-		else
-			$message = "Failed Adding New Record";
-		return $message;
+		if(isset($_POST['rollno'])) {
+			$rollno=$_POST['rollno'];
+			$count=0;
+			$this->andAddIfIsset($query,"name" , $count);
+			$this->andAddIfIsset($query,"department_id" , $count);
+			$this->andAddIfIsset($query,"address" , $count, True);
+			$this->andAddIfIsset($query,"gender" , $count, True);
+			$this->andAddIfIsset($query,"date_of_birth" , $count, True);
+			$this->andAddIfIsset($query,"phone_no" , $count);
+			$this->andAddIfIsset($query,"email_id" , $count, True);
+			$this->andAddIfIsset($query,"joining_year" , $count);
+			$this->andAddIfIsset($query,"fathers_name" , $count, True);
+			$this->andAddIfIsset($query,"mothers_name" , $count, True);
+
+			if($count==0)
+				return ;
+
+			$query .= "	WHERE `rollno` =". $rollno;
+
+			$result = $this->executeQuery($this->conn, $query);	
+			if($result != 0){
+				$result = array('success'=>1);
+				return $result;
+			}			  		
+		}
 	}
 
-	public function deleteStudentEnrollment($rollno, $course_faculty_year_id ) {
-		$result = $this->conn->query("DELETE FROM `enrollment` WHERE `rollno`= ". $rollno. "AND `course_faculty_year_id` =". $course_faculty_year_id);
-		
-		if( $this->conn->affected_rows > 0 )
-			$message = "Record Deleted Successfully";
-		else
-			$message = "Failed Record Deletion";
-		return $message;			  		
+	public function deleteStudent() {
+		if(isset($_POST['rollno']) ) {
+			$rollno=$_POST['rollno'];
+
+			$query="DELETE FROM `student` WHERE `rollno`= ". $rollno;
+			$result = $this->executeQuery($this->conn, $query);	
+			if($result != 0){
+				$result = array('success'=>1);
+				return $result;
+			}			  		
+		}			  		
 	}
+
 }
 
 
 #Testing - debuging
-		$conn = new mysqli($details['server_host'], $details['mysql_name'], $details['mysql_password'], $details['mysql_database']);	
+/*		$conn = new mysqli($details['server_host'], $details['mysql_name'], $details['mysql_password'], $details['mysql_database']);	
 		$object = new Student($conn);
 		var_dump( json_encode( $object->getStudents() ) );
 		echo "<br>";
@@ -151,7 +146,7 @@ Class Student{
 		var_dump( json_encode( $object->getStudentEnrollment(111055)) );
 		echo "<br>";
 		echo $object->setStudent(111052, 1);
-		echo $object->deleteStudent(111052,1);
+		echo $object->deleteStudent(111052,1);*/
 /*		echo $object->setStudent('Laximinarayan', 'm');
 		echo $object->updateStudent(111068, 'Laxi');
 		echo $object->deleteStudent(111068);*/

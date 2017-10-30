@@ -18,29 +18,36 @@ class TimetableRestHandler extends SimpleRest{
 		$this->conn->close();
 	}
 
-	function getFacultyTimetable($faculty_id){
+	function getFacultyTimetable(){
 		$object = new Timetable($this->conn);
-		$rawData = $object->getFacultyTimetable($faculty_id);
+		$rawData = $object->getFacultyTimetable();
 
 		return $this->restHandling($rawData);
 	}
 
-	function getSemTimetable($semester, $year){
+	function getSemTimetable(){
 		$object = new Timetable($this->conn);
-		$rawData = $object->getSemTimetable($semester, $year);
-	
+		$rawData = $object->getSemTimetable();
 		return $this->restHandling($rawData);
 	}
 
-	function getStudentTimetable($rollno, $year){
-/*		$this->conn = new mysqli($details['server_host'], $details['mysql_name'], $details['mysql_password'], $details['mysql_database']);	
-*/
+	function getStudentTimetable(){
 		$object = new Timetable($this->conn);
-		$rawData = $object->getStudentTimetable($rollno, $year);
+		$rawData = $object->getStudentTimetable();
 		
 		return $this->restHandling($rawData);
 	}
+	function add(){
+		$object = new Timetable($this->conn);
+		$rawData = $object->addTimetable();
+		return $this->restHandlingNSQ($rawData);
+	}
 
+	function delete(){
+		$object = new Timetable($this->conn);
+		$rawData = $object->deleteTimetable();
+		return $this->restHandlingNSQ($rawData);
+	}
 }
 
 ?>

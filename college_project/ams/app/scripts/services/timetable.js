@@ -19,7 +19,7 @@ angular.module('amsApp')
     		//async operation
 		    $http({
 		    	 method: 'GET',
-		    	 url: $rootScope.$baseBackendUrl+'ams/FacultyTimetable/'+faculty_id+'/',
+		    	 url: $rootScope.$baseBackendUrl+'ams/FacultyTimetable/'+faculty_id+'/'+year+'/'
 		    	}).then(function(response) { 
 		    		//on success
 					console.log(String(response.data));

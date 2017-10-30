@@ -48,7 +48,7 @@ angular.module('amsApp')
 	});
 
 
-/*	this.data= [
+		/*	this.data= [
 				[ 'mon', 'oopd',  new Date(0, 0, 0, 9, 0, 0),  new Date(0, 0, 0, 10, 0, 0) ],
 				[ 'tue', 'oopd',   new Date(0, 0, 0, 10, 0, 0),  new Date(0, 0, 0, 11, 0, 0) ],
 				[ 'wed', 'em',     new Date(0, 0, 0, 9, 0, 0),  new Date(0, 0, 0, 10, 0, 0) ],

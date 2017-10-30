@@ -15,7 +15,14 @@ Class Course{
 	}
 
 	public function getCourses() {
-		$result = $this->conn->query("SELECT `course_id`,`title` FROM `course`");
+		$query="SELECT `course_id`,`title` FROM `course` ";
+
+		if(isset($_GET['course_id']))	{
+			$course_id=$_GET['course_id'];
+			$query.=" WHERE `course_id` = ". $course_id;
+		}	
+
+		$result = $this->conn->query($query);
 		$data=array();
 		while($rs = $result->fetch_array(MYSQLI_ASSOC)) {
 		  $data[$rs["course_id"]] = $rs["title"];		
@@ -23,67 +30,77 @@ Class Course{
 		return $data;
 	}
 
-	public function getCourse($course_id) {
-		$result = $this->conn->query("SELECT `course_id`,`title` FROM `course` WHERE `course_id`=". $course_id);
-		$data=array();
-		while($rs = $result->fetch_array(MYSQLI_ASSOC)) {
-		  $data[$rs["course_id"]] = $rs["title"];		
+	public function addCourse() {
+
+		if(isset($_POST['title']) && isset($_POST['semester']) ) {
+
+			$title = $_POST['title'];
+			$semester =   $_POST['semester'];
+
+			$query="INSERT INTO `course`(`title`, `semester`) VALUES (
+			'". $title ."' , ". $semester ." )";
+
+		// echo "<br>". $q ."<br>"; #debug	
+			$result = $this->executeQuery($this->conn, $query);	
+			if($result != 0){
+				$result = array('success'=>1);
+				return $result;
+			}
 		}
-		return $data;
 	}
 
-	public function setCourse( $title,  $semester) {
-		
-		$q="INSERT INTO `course`(`title`, `semester`) VALUES (
-". nullHandler($title). ",
-". nullHandler($semester). "
-		)";
+	public function updateCourse() {
+		$query = "UPDATE `course` SET  " ;
 
-		echo "<br>". $q ."<br>"; #debug
-		
-		$result = $this->conn->query( $q);
-		$current_id = $this->conn->insert_id;
-		if( !empty($current_id) )
-			$message = "New Record Added Successfully";
-		else
-			$message = "Failed Adding New Record";
-		return $message;
+		if(isset($_POST['course_id'])) {
+			$course_id=$_POST['course_id'];
+			$count=0;
+			if(isset($_POST['title'])) {
+				$title=$_POST['title']; 
+				$query .= " title = '". $title."' ";
+				$count++;
+			}
+			if(isset($_POST['semester']) ){ 
+				$semester=$_POST['semester']; 
+				if($count > 0)
+				$query .=" AND ";
+				$query .= " semester = '". $semester. "' ";
+				$count++;
+			}
+			if($count==0)
+				return ;
+
+			$query .= "	WHERE `course_id` =". $course_id;
+
+			$result = $this->executeQuery($this->conn, $query);	
+			if($result != 0){
+				$result = array('success'=>1);
+				return $result;
+			}			  		
+		}
 	}
 
-	public function updateCourse($course_id, $title = null,  $semester = null) {
-		
-		$q="UPDATE `course` SET 
-". nullHandler($title, "title") ."
-". nullHandler($semester, "semester", ",") ."
-		WHERE `course_id` =". $course_id;
-		
-		echo "<br>". $q ."<br>";	#debug
-
-		$result = $this->conn->query( $q);	
-		if( $this->conn->affected_rows > 0 )
-			$message = "Record Modified Successfully";
-		else
-			$message = "Failed Record Modification";
-		return $message;
+///TODO: Dependent teacheces claass attendence enrollment needs to be deleted
+	public function deleteCourse() {		
+		if(isset($_POST['course_id'])) {
+			$course_id=$_POST('course_id');
+			
+			$query = "DELETE FROM `course` WHERE `course_id`= ". $course_id ;
+			$result = $this->executeQuery($this->conn, $query);	
+			if($result != 0){
+				$result = array('success'=>1);
+				return $result;
+			}			  		
+		}
 	}
 
-	public function deleteCourse($course_id) {
-		$result = $this->conn->query("DELETE FROM `course` WHERE `course_id`= ". $course_id);
-		
-		if( $this->conn->affected_rows > 0 )
-			$message = "Record Deleted Successfully";
-		else
-			$message = "Failed Record Deletion";
-		return $message;			  		
-	}
-
-		public function getCourseEnrollment() {
+	public function getCourseEnrollment() {
 			$query="SELECT `enrollment`.`rollno`,`student`.`name`, `student`.`gender` FROM `enrollment` JOIN `teaches` ON  `enrollment`.`course_faculty_year_id`= `teaches`.`course_faculty_year_id` JOIN `student` ON `student`.`rollno`= `enrollment`.`rollno` ";
-			if(isset($course_faculty_year_id)){
+			if(isset($_GET['course_faculty_year_id'])){
 				$course_faculty_year_id= $_GET['course_faculty_year_id'];
 				$query .= 	" WHERE `enrollment`.`course_faculty_year_id` = ". $course_faculty_year_id;
 			}
-			else if(isset($course_id, $year)){
+			else if(isset($_GET['course_id'], $_GET['year'])){
 				$course_id= $_GET['course_id'];
 				$year= $_GET['year'];
 				$query .= 	" WHERE `enrollment`.`course_faculty_year_id` IN (SELECT `course_faculty_year_id` FROM `teaches` 
@@ -99,6 +116,47 @@ Class Course{
 	  		  array_push($data,$tmp);	
 			}
 			return $data;
+	}
+	public function getStudentEnrollment() {
+		if(isset($_POST['rollno']) ) {
+			$rollno=$_POST['rollno'];
+			$result = $this->conn->query("SELECT `rollno`, `enrollment`.`course_faculty_year_id`, `course`.`title`, `course`.`semester`, `faculty`.`faculty_id`, `faculty`.`faculty_name` FROM `enrollment` JOIN `teaches` ON  `enrollment`.`course_faculty_year_id`= `teaches`.`course_faculty_year_id` JOIN `course` ON `teaches`.`course_id`= `course`.`course_id` JOIN `faculty` ON `teaches`.`faculty_id`= `faculty`.`faculty_id` WHERE `rollno` = ". $rollno);
+			$data=array();
+			while($rs = $result->fetch_array(MYSQLI_ASSOC)) {
+			  $data[$rs["course_faculty_year_id"]]["title"] = $rs["title"];	
+	  		  $data[$rs["course_faculty_year_id"]]["semester"] = $rs["semester"];	
+	  		  $data[$rs["course_faculty_year_id"]]["faculty_id"] = $rs["faculty_id"];	
+	  		  $data[$rs["course_faculty_year_id"]]["faculty_name"] = $rs["faculty_name"];	
+			}
+			return $data;
+		}
+	}
+
+	public function addCourseCEnrollment() {
+		if(isset($_POST['rollno']) && isset($_POST['course_faculty_year_id']) ) {
+			$rollno=$_POST['rollno'];
+			$course_faculty_year_id=$_POST['course_faculty_year_id'];
+
+			$query="INSERT INTO `enrollment`(`rollno`, `course_faculty_year_id`) VALUES  ( ".$rollno.", ".$course_faculty_year_id." )";
+			$result = $this->executeQuery($this->conn, $query);	
+			if($result != 0){
+				$result = array('success'=>1);
+				return $result;
+			}			  		
+		}
+	}
+
+	public function deleteCourseCEnrollment() {
+		if(isset($_POST['rollno']) && isset($_POST['course_faculty_year_id']) ) {
+			$rollno=$_POST['rollno'];
+			$rollno=$_POST['course_faculty_year_id'];
+			$query="DELETE FROM `enrollment` WHERE `rollno`= ". $rollno. "AND `course_faculty_year_id` =". $course_faculty_year_id;
+			$result = $this->executeQuery($this->conn, $query);	
+			if($result != 0){
+				$result = array('success'=>1);
+				return $result;
+			}			  		
+		}	  		
 	}
 }
 

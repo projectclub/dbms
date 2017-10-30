@@ -17,8 +17,13 @@ Class Attendance{
 		if(isset($_GET['class_id']))	{
 			$class_id=$_GET['class_id'];
 			$query.=" WHERE `class_id` = ". $class_id;
+		}		
+		else if(isset($_GET['course_faculty_year_id']) ) {
+			$course_faculty_year_id=$_GET['course_faculty_year_id'];
+			$query.=" WHERE `class_id` IN
+			(SELECT `class_id` FROM `class` WHERE `course_faculty_year_id` = ". $course_faculty_year_id.")";
 		}	
-		else if(isset($_GET['course_id']) ) {
+		else if(isset($_GET['course_id']) && isset($_GET['year'])) {
 			$course_id=$_GET['course_id'];
 			$year=$_GET['year'];
 			$query.=" WHERE `class_id` IN
@@ -26,11 +31,7 @@ Class Attendance{
 			 (SELECT `course_faculty_year_id` FROM `teaches` 
 			 	WHERE `course_id`= ".$course_id. " AND `year` = ". $year."))";
 		}
-		else if(isset($_GET['course_faculty_year_id']) ) {
-			$course_faculty_year_id=$_GET['course_faculty_year_id'];
-			$query.=" WHERE `class_id` IN
-			(SELECT `class_id` FROM `class` WHERE `course_faculty_year_id` = ". $course_faculty_year_id.")";
-		}
+
 
 		$result = $this->conn->query($query);
 		$data=array();
@@ -113,7 +114,7 @@ Class Attendance{
 	}
 
 	public function deleteAttendace() {
-		if(isset($_POST['class_id']) && isset($_POST['rollno']) && isset($_POST['proxy'])) {
+		if(isset($_POST['class_id']) && isset($_POST['rollno']) ) {
 			$class_id=$_POST['class_id'];
 			$rollno=$_POST['rollno'];
 

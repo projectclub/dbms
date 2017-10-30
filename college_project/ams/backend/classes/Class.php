@@ -95,34 +95,72 @@ Class TClass{
 		} 
 	}
 
-	public function updateClass($class_id, $course_faculty_year_id,  $date, $start_time, $end_time) {
+	public function updateClass() {
 		
-		$q="UPDATE `class` SET 
-		". nullHandler($course_faculty_year_id, "course_faculty_year_id"). "
-		". nullHandler($date, "date", ","). "
-		". nullHandler($start_time, "start_time", ","). "
-		". nullHandler($end_time, "end_time", ","). "
-		WHERE `class_id` =". $class_id;
-		
-		echo "<br>". $q ."<br>";	#debug
+		$query = "UPDATE `class` SET " ;
 
-		$result = $this->conn->query( $q);	
-		if( $this->conn->affected_rows > 0 )
-			$message = "Record Modified Successfully";
-		else
-			$message = "Failed Record Modification";
-		return $message;
+		if(isset($_POST['class_id'])) {
+			$class_id=$_POST['class_id'];
+			$count=0;
+			if(isset($_POST['course_faculty_year_id'])) {
+				$course_faculty_year_id=$_POST['course_faculty_year_id']; 
+				$query .= " course_faculty_year_id = ". $course_faculty_year_id;
+				$count++;
+			}
+			if(isset($_POST['date']) ){ 
+				$date=$_POST['date']; 
+				if($count > 0)
+				$query .=" AND ";
+				$query .= " date = '". $date. "' ";
+				$count++;
+			}
+			if(isset($_POST['start_time']) ) { 
+				$start_time=$_POST['start_time']; 
+				if($count > 0)
+				$query .=" AND ";
+				$query .= " start_time = '". $start_time. "' ";
+				$count++;
+			}
+			if(isset($_POST['end_time'])) { 
+				$end_time=$_POST['end_time']; 
+				if($count > 0)
+				$query .=" AND ";
+				$query .= " end_time = '". $end_time. "' ";
+				$count++;
+			}
+			if($count==0)
+				return ;
+
+			$query .= "	WHERE `class_id` =". $class_id;
+
+			$result = $this->executeQuery($this->conn, $query);	
+			if($result != 0){
+				$result = array('success'=>1);
+				return $result;
+			}			  		
+		}
 	}
+
 	/*DELETE FROM `enrollment` WHERE `course_faculty_year_id` =*/
-	public function deleteClass($class_id) {
-		$result = $this->conn->query("DELETE FROM `attendance` WHERE `class_id` = ". $class_id);
-		$result = $this->conn->query("DELETE FROM `class` WHERE `class_id`= ". $class_id);
-		
-		if( $this->conn->affected_rows > 0 )
-			$message = "Record Deleted Successfully";
-		else
-			$message = "Failed Record Deletion";
-		return $message;			  		
+	public function deleteClass() {
+		if(isset($_POST['class_id'])) {
+			$class_id=$_POST('class_id');
+			
+			$query = "DELETE FROM `attendance` WHERE `class_id` = ". $class_id ;
+			
+			$result = $this->executeQuery($this->conn, $query);	
+			if($result != 0){
+				$query = "DELETE FROM `class` WHERE `class_id`= ". $class_id;
+				$result = $this->executeQuery($this->conn, $query);	
+
+				if($result != 0){					
+					$result = array('success'=>2);
+					return $result;
+				}
+				$result = array('success'=>1);
+				return $result;
+			}		  
+		}		
 	}
 }
 
